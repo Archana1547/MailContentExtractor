@@ -1,6 +1,9 @@
+import win32com.client
+import os
+import pdfReader
 import mailUtils
 import connection
-
+import stdiomask
 
 mailSer=mailUtils.mailExtractorUtils()
 messages=mailSer.connectToMail()
@@ -15,14 +18,12 @@ for message in messages:
     body=mailSer.getBody(message)
     """bodyList.append(body)
     aList.append(aData)"""
-    
-    # This will save attachments and bdy from the mail in a dictionary
     contents={"attachment":aData,"body":body}
-    
-    #This will get connection from the database and save the records accoringly
     coln=connection.getDB()
     coln.insert_one(contents)
 
 
+
+#body=mailSer.getBody(connection)
 
 
