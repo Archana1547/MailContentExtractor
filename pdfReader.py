@@ -32,11 +32,15 @@ class pdfUtils:
     # This method will check which method to call from above 2
     # If the attachement contains sacnned pdf,it will return None when tried to read
     #otherwise it will return the text
+    # 
     def readPDF(self,pdf):
         if self.getNormalPdfContent(pdf) is None:
             return self.getScannedPdfConetnt(pdf)
         else:
             return self.getScannedPdfConetnt(pdf)
 
+        
+        
+        
 
 
