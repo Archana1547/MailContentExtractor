@@ -4,17 +4,32 @@ import win32com
 import pdfReader
 
 class mailExtractorUtils:
+
+    #This method will connect the application to outlook
     def connectToMail(self):
         outlook = win32com.client.Dispatch("Outlook.Application")
+
+        #mapi is Messaging API,it will let us to connect to outlook and give access to mails
         mapi = outlook.GetNamespace("MAPI")
-        inbox = mapi.GetDefaultFolder(5)
+
+        #For every folder, a distinct number is given, through that number we can acces
+        # all the mails in of the folder associated with it
+        # 5 is for Sent Items, 6 is for Inbox and so on
+        #Below line will fetch the folder
+        inbox = mapi.GetDefaultFolder(6)
+
+        #This will fetch emails in that folder
         messages = inbox.Items
+
+        #This will impose a Filter on the mails which are fetched
+        #Only those mails which are received in past 24 hrs will be fetched
         received_dt = datetime.now() - timedelta(days=1)
         received_dt = received_dt.strftime('%m/%d/%Y %H:%M %p')
         messages=messages.Restrict("[ReceivedTime] >= '" + received_dt + "'")
         return messages
-       # messages = inbox.Items
 
+
+    #This method will extrct attachments of the mails
     def getAttachment(self,attachments):
         pdfUtil=pdfReader.pdfUtils()
         data=""
@@ -33,10 +48,10 @@ class mailExtractorUtils:
                     data=filename #  pdfUtil.getOtherFormatContent(attachment.FileName)
 
         else:
-           print("WHy")
            data="No attachments"
         return data
 
+    #THis method will fetch body of the mail
     def getBody(self,message):
         #messages = messages.Items
         body=message.Body
@@ -50,6 +65,7 @@ class mailExtractorUtils:
         body= self.getBody(message)
         record={"body":body,"a":attachmentData}
         return record"""
+
 
 
 
